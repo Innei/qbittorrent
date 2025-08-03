@@ -49,8 +49,8 @@ importers:
         specifier: ^9.31.0
         version: 9.31.0(jiti@2.5.1)
       nbump:
-        specifier: 2.1.6
-        version: 2.1.6(conventional-commits-filter@5.0.0)(magicast@0.3.5)
+        specifier: 2.1.7
+        version: 2.1.7(conventional-commits-filter@5.0.0)(magicast@0.3.5)
       p-wait-for:
         specifier: 5.0.2
         version: 5.0.2
@@ -1433,8 +1433,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  nbump@2.1.6:
-    resolution: {integrity: sha512-Dh2Lg3OKJtZILD4xDwD9u3+dJ5K2VYfhrXg5V46Xq4PDacpurN4P/tdIPa85owabVQjaXKUyZ4Jx5qcmmCGyRw==}
+  nbump@2.1.7:
+    resolution: {integrity: sha512-jXqoeazfaG3VCFsYFZ3NzHfDe2ZR+XWxj0XV5SAWNR339GxE5mNsZtfxe3k2l04QxcGP5IidSPO5d2AsXnOvbQ==}
     hasBin: true
 
   neo-async@2.6.2:
@@ -3180,7 +3180,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  nbump@2.1.6(conventional-commits-filter@5.0.0)(magicast@0.3.5):
+  nbump@2.1.7(conventional-commits-filter@5.0.0)(magicast@0.3.5):
     dependencies:
       c12: 3.2.0(magicast@0.3.5)
       conventional-changelog: 6.0.0(conventional-commits-filter@5.0.0)
