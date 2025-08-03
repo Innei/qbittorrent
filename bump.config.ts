@@ -17,7 +17,7 @@ export default defineConfig({
   push: true,
 
   // whether to publish to npm
-  publish: false,
+  publish: true,
 
   // whether to generate changelog
   changelog: false,
