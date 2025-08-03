@@ -1,6 +1,6 @@
 {
-  "name": "@ctrl/qbittorrent",
-  "version": "0.0.0-placeholder",
+  "name": "@innei/qbittorrent-browser",
+  "version": "9.6.1",
   "description": "TypeScript api wrapper for qbittorrent using got",
   "author": "Scott Cooper <scttcper@gmail.com>",
   "license": "MIT",
@@ -39,9 +39,6 @@
     "@ctrl/magnet-link": "^4.0.2",
     "@ctrl/shared-torrent": "^6.2.1",
     "@ctrl/torrent-file": "^4.1.0",
-    "cookie": "^1.0.2",
-    "node-fetch-native": "^1.6.6",
-    "ofetch": "^1.4.1",
     "type-fest": "^4.41.0",
     "ufo": "^1.6.1",
     "uint8array-extras": "^1.4.0"
