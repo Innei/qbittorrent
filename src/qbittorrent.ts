@@ -1213,61 +1213,26 @@ export class QBittorrent implements TorrentClient {
   ): Promise<T> {
     const url = joinURL(this.config.baseUrl, this.config.path ?? "", path);
 
-    try {
-      const res = await fetchJson<T>(
-        url,
-        {
-          method,
-          headers: {
-            // In browser, cookies are handled automatically by the browser
-            // No need to manually set Cookie header
-            ...headers,
-          },
-          body,
-          params,
-
-          timeout: this.config.timeout,
-          responseType: isJson ? "json" : "text",
-          dispatcher: this.config.dispatcher,
+    const res = await fetchJson<T>(
+      url,
+      {
+        method,
+        headers: {
+          // In browser, cookies are handled automatically by the browser
+          // No need to manually set Cookie header
+          ...headers,
         },
-        this.config.fetch
-      );
+        body,
+        params,
 
-      return res;
-    } catch (error: any) {
-      // Handle auth errors by status code
-      if (
-        error.message?.includes("HTTP 401") ||
-        error.message?.includes("HTTP 403")
-      ) {
-        // Clear auth state and try to login again
-        const authed = await this.login();
-        if (!authed) {
-          throw new Error("Authentication failed");
-        }
+        timeout: this.config.timeout,
+        responseType: isJson ? "json" : "text",
+        dispatcher: this.config.dispatcher,
+      },
+      this.config.fetch
+    );
 
-        // Retry the original request
-        const res = await fetchJson<T>(
-          url,
-          {
-            method,
-            headers: {
-              ...headers,
-            },
-            body,
-            params,
-            timeout: this.config.timeout,
-            responseType: isJson ? "json" : "text",
-            dispatcher: this.config.dispatcher,
-          },
-          this.config.fetch
-        );
-
-        return res;
-      }
-
-      throw error;
-    }
+    return res;
   }
 
   private async checkVersion(): Promise<void> {
