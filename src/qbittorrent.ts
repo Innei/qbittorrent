@@ -335,7 +335,9 @@ export class QBittorrent implements TorrentClient {
       undefined,
       objToUrlSearchParams({
         json: JSON.stringify(preferences),
-      })
+      }),
+      {},
+      false
     );
     return true;
   }
