@@ -114,7 +114,6 @@ async function fetchJson<T>(
     body?: string | FormData | URLSearchParams;
     params?: Record<string, string | number>;
     timeout?: number;
-    responseType?: "json" | "text";
     dispatcher?: any;
   },
   customFetch: typeof fetch = fetch
@@ -146,11 +145,20 @@ async function fetchJson<T>(
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
-    if (options.responseType === "text") {
+    const isJSON = response.headers
+      .get("Content-Type")
+      ?.includes("application/json");
+    try {
+      const clonedResponse = response.clone();
+      if (isJSON) {
+        return (await clonedResponse.json()) as T;
+      }
+      return (await clonedResponse.text()) as T;
+    } catch (error) {
+      console.error(error);
+
       return (await response.text()) as T;
     }
-
-    return (await response.json()) as T;
   } finally {
     if (timeoutId) {
       clearTimeout(timeoutId);
@@ -190,8 +198,7 @@ export class QBittorrent implements TorrentClient {
       "GET",
       undefined,
       undefined,
-      undefined,
-      false
+      undefined
     );
     return res;
   }
@@ -202,8 +209,7 @@ export class QBittorrent implements TorrentClient {
       "GET",
       undefined,
       undefined,
-      undefined,
-      false
+      undefined
     );
     return res;
   }
@@ -217,8 +223,7 @@ export class QBittorrent implements TorrentClient {
       "GET",
       undefined,
       undefined,
-      undefined,
-      false
+      undefined
     );
     return res;
   }
@@ -336,8 +341,7 @@ export class QBittorrent implements TorrentClient {
       objToUrlSearchParams({
         json: JSON.stringify(preferences),
       }),
-      {},
-      false
+      {}
     );
     return true;
   }
@@ -518,8 +522,7 @@ export class QBittorrent implements TorrentClient {
         id: normalizeHashes(fileIds),
         priority: priority.toString(),
       }),
-      undefined,
-      false
+      undefined
     );
     return true;
   }
@@ -601,8 +604,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       objToUrlSearchParams(data),
-      undefined,
-      false
+      undefined
     );
     return true;
   }
@@ -618,8 +620,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       objToUrlSearchParams(data),
-      undefined,
-      false
+      undefined
     );
     return true;
   }
@@ -645,8 +646,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       objToUrlSearchParams(data),
-      undefined,
-      false
+      undefined
     );
     return true;
   }
@@ -661,8 +661,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       objToUrlSearchParams(data),
-      undefined,
-      false
+      undefined
     );
     return true;
   }
@@ -677,8 +676,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       objToUrlSearchParams(data),
-      undefined,
-      false
+      undefined
     );
     return true;
   }
@@ -696,8 +694,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       objToUrlSearchParams(data),
-      undefined,
-      false
+      undefined
     );
     return true;
   }
@@ -720,8 +717,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       objToUrlSearchParams(data),
-      undefined,
-      false
+      undefined
     );
     return true;
   }
@@ -810,8 +806,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       objToUrlSearchParams(data),
-      undefined,
-      false
+      undefined
     );
     return true;
   }
@@ -862,7 +857,11 @@ export class QBittorrent implements TorrentClient {
         new File([base64ToUint8Array(torrent)], "file.torrent", type)
       );
     } else {
-      const file = new File([torrent], options.filename ?? "torrent", type);
+      const file = new File(
+        [torrent as any],
+        options.filename ?? "torrent",
+        type
+      );
       form.set("file", file);
     }
 
@@ -890,8 +889,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       form,
-      undefined,
-      false
+      undefined
     );
 
     if (res === "Fails.") {
@@ -954,8 +952,7 @@ export class QBittorrent implements TorrentClient {
         oldPath,
         newPath,
       }),
-      undefined,
-      false
+      undefined
     );
 
     return true;
@@ -978,8 +975,7 @@ export class QBittorrent implements TorrentClient {
         oldPath,
         newPath,
       }),
-      undefined,
-      false
+      undefined
     );
 
     return true;
@@ -1020,8 +1016,7 @@ export class QBittorrent implements TorrentClient {
       "POST",
       undefined,
       form,
-      undefined,
-      false
+      undefined
     );
 
     if (res === "Fails.") {
@@ -1210,8 +1205,7 @@ export class QBittorrent implements TorrentClient {
     method: "GET" | "POST",
     params?: Record<string, string | number>,
     body?: URLSearchParams | FormData,
-    headers: Record<string, string> = {},
-    isJson = true
+    headers: Record<string, string> = {}
   ): Promise<T> {
     const url = joinURL(this.config.baseUrl, this.config.path ?? "", path);
 
@@ -1228,7 +1222,7 @@ export class QBittorrent implements TorrentClient {
         params,
 
         timeout: this.config.timeout,
-        responseType: isJson ? "json" : "text",
+
         dispatcher: this.config.dispatcher,
       },
       this.config.fetch
